@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>💎 Mine Game 💣</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin: 10px;
+            font-size: 2rem;
+        }
+
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        .box {
+            background: #222;
+            padding-top: 100%;
+            /* makes it a perfect square */
+            position: relative;
+            border: 2px solid #444;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .box-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+        }
+
+        .box.clicked {
+            background: #111;
+            cursor: default;
+        }
+
+        #score {
+            font-size: 1.5rem;
+            margin-top: 10px;
+        }
+
+        button {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #666;
+        }
+
+        @media (max-width: 600px) {
+            #grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 8px;
+            }
+
+            .box-content {
+                font-size: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>💎 Tap to Collect, Avoid the Bomb! 💣</h1>
+    <div id="grid"></div>
+    <div id="score">Score: 0</div>
+    <button onclick="startGame()">Restart Game</button>
+
+    <!-- Optional Sound -->
+    <!-- <audio id="boom" src="boom.mp3"></audio> -->
+
+    <script>
+        const grid = document.getElementById('grid');
+        const scoreDisplay = document.getElementById('score');
+        let bombIndex, score;
+
+        function startGame() {
+            grid.innerHTML = '';
+            score = 0;
+            scoreDisplay.textContent = "Score: 0";
+            bombIndex = Math.floor(Math.random() * 25); // 5x5 grid
+
+            for (let i = 0; i < 25; i++) {
+                const box = document.createElement('div');
+                box.className = 'box';
+                box.dataset.index = i;
+
+                const content = document.createElement('div');
+                content.className = 'box-content';
+                box.appendChild(content);
+
+                box.addEventListener('click', () => handleClick(box, i));
+                grid.appendChild(box);
+            }
+        }
+
+        function handleClick(box, index) {
+            if (box.classList.contains('clicked')) return;
+
+            const content = box.querySelector('.box-content');
+            box.classList.add('clicked');
+
+            if (index == bombIndex) {
+                content.textContent = '💣';
+                // document.getElementById('boom').play(); // Optional sound
+                revealAll();
+                setTimeout(() => {
+                    window.location.href = 'over.html'; // Redirect to over.html after bomb blast
+                }, 500); // Wait 0.5s before redirect
+            } else {
+                content.textContent = '💎';
+                score++;
+                scoreDisplay.textContent = "Score: " + score;
+            }
+        }
+
+        function revealAll() {
+            const boxes = document.querySelectorAll('.box');
+            boxes.forEach((box, i) => {
+                const content = box.querySelector('.box-content');
+                box.classList.add('clicked');
+                content.textContent = (i == bombIndex) ? '💣' : '💎';
+            });
+        }
+
+        startGame();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Game Over</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #1b1b1b;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin-top: 30px;
+            font-size: 3rem;
+            color: red;
+            animation: flicker 2s infinite;
+            text-align: center;
+        }
+
+        .scene {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .volcano {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            /* 🔥 Bigger volcano */
+            z-index: 1;
+        }
+
+        .monster {
+            position: absolute;
+            left: 10%;
+            bottom: 10px;
+            font-size: 3rem;
+            z-index: 3;
+        }
+
+        .girl {
+            position: absolute;
+            left: 10%;
+            bottom: 60px;
+            font-size: 3rem;
+            z-index: 2;
+            transition: transform 3s ease-in, opacity 2s ease-in;
+        }
+
+        .girl.flying {
+            left: 50%;
+            bottom: 300px;
+            transform: translateX(-50%) rotate(720deg);
+        }
+
+        .girl.burning {
+            animation: burnAndDisappear 3s forwards;
+        }
+
+        @keyframes burnAndDisappear {
+            0% {
+                filter: brightness(1) saturate(1);
+                opacity: 1;
+            }
+
+            50% {
+                filter: brightness(2) saturate(3) hue-rotate(30deg);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.5) rotate(1080deg);
+            }
+        }
+
+        .restart-btn {
+            margin-top: 20px;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            background: crimson;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            z-index: 10;
+        }
+
+        .restart-btn:hover {
+            background: darkred;
+        }
+
+        @keyframes flicker {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Looser</h1>
+
+    <div class="scene">
+        <div class="monster">👹</div>
+        <div class="girl" id="girl">👧</div>
+        <!-- 🔁 Replace with your volcano image -->
+        <img src="volcano.jpg" alt="Volcano" class="volcano" />
+    </div>
+
+    <button class="restart-btn" onclick="location.href='index.html'">Restart</button>
+
+    <script>
+        // Animate girl flying into volcano and burning
+        window.onload = function () {
+            const girl = document.getElementById('girl');
+
+            setTimeout(() => {
+                girl.classList.add('flying');
+            }, 1000);
+
+            setTimeout(() => {
+                girl.classList.add('burning');
+            }, 3500); // Start burning after flying
+        };
+    </script>
+
+</body>
+
+</html>
